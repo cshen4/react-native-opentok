@@ -52,7 +52,17 @@ public class RNOpenTokSessionManager implements Session.SessionListener, Session
     }
 
     public Session connectToSession(String sessionId, String token) {
-        Session session = new Session(this.mContext, this.mApiKey, sessionId);
+        //Session session = new Session(this.mContext, this.mApiKey, sessionId);
+
+        // Set using TextureViews rather than GLSurfaceViews to avoid z-index problem
+        Session session = new Session.Builder(this.mContext,  this.mApiKey, sessionId)
+                .sessionOptions(new Session.SessionOptions() {
+                    @Override
+                    public boolean useTextureViews() {
+                        return true;
+                    }
+                }).build();
+        
         session.connect(token);
         this.mSessions.put(sessionId, session);
 
